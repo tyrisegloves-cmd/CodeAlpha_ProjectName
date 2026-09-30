@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% load core_extras %}{% block content %}<h1 class="pt">People</h1>
+{% for u in users %}<div class="panel person"><a class="av" style="--h:{{ u.username|hue }}" href="{% url 'profile' u.username %}">{{ u|initial }}</a>
+<div class="grow"><a href="{% url 'profile' u.username %}"><b>{{ u.get_full_name|default:u.username }}</b></a> <span class="muted">@{{ u.username }}</span><p class="muted">{{ u.profile.bio }}</p><small class="muted">{{ u.nfollowers }} followers</small></div>
+<button class="btn sm follow {% if u.id in mine %}on{% endif %}" data-url="{% url 'follow' u.username %}">{% if u.id in mine %}Unfollow{% else %}Follow{% endif %}</button></div>
+{% empty %}<p class="muted">No one else has joined yet.</p>{% endfor %}{% endblock %}

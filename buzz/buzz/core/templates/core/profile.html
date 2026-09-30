@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% load core_extras %}{% block title %}{{ u.get_full_name|default:u.username }} (@{{ u.username }}){% endblock %}{% block content %}
+<section class="panel prof"><div class="cover" style="--h:{{ u.username|hue }}"></div>
+<div class="pin"><span class="av big" style="--h:{{ u.username|hue }}">{{ u|initial }}</span>
+<div class="cta">{% if user == u %}<a class="btn sm ghost" href="{% url 'edit_profile' %}">Edit profile</a>
+{% elif user.is_authenticated %}<button class="btn follow {% if is_following %}on{% endif %}" data-url="{% url 'follow' u.username %}">{% if is_following %}Unfollow{% else %}Follow{% endif %}</button>{% endif %}</div></div>
+<div class="pbody"><h1>{{ u.get_full_name|default:u.username }}</h1><p class="muted">@{{ u.username }}{% if u.profile.location %} &middot; {{ u.profile.location }}{% endif %} &middot; Joined {{ u.date_joined|date:"M Y" }}</p>
+<p>{{ u.profile.bio|default:"No bio yet." }}</p>
+<p class="stats"><span><b id="followers-count">{{ nfollowers }}</b> followers</span><span><b>{{ nfollowing }}</b> following</span><span><b>{{ posts|length }}</b> posts</span></p></div></section>
+{% for p in posts %}{% include "core/_post.html" %}{% empty %}<p class="muted">No posts yet.</p>{% endfor %}{% endblock %}

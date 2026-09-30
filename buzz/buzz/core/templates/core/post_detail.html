@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% load core_extras %}{% block content %}
+<h1 class="pt"><a class="back" href="{% url 'feed' %}" aria-label="Back">&larr;</a> Post</h1>{% include "core/_post.html" %}
+<h2 class="sub">Comments ({{ comments|length }})</h2>
+{% for c in comments %}<div class="comment"><a class="av sm" style="--h:{{ c.author.username|hue }}" href="{% url 'profile' c.author.username %}">{{ c.author|initial }}</a>
+<div><b>{{ c.author.get_full_name|default:c.author.username }}</b> <span class="muted">@{{ c.author.username }} &middot; {{ c.created|ago }}</span><p>{{ c.text }}</p></div></div>{% empty %}<p class="muted">Be the first to reply.</p>{% endfor %}
+{% if user.is_authenticated %}<form method="post" class="composer panel">{% csrf_token %}<span class="av sm" style="--h:{{ user.username|hue }}">{{ user|initial }}</span>
+<div class="grow"><textarea name="text" maxlength="280" rows="2" placeholder="Write a reply" required></textarea><div class="bottom"><span class="count muted">280</span><button class="btn" disabled>Reply</button></div></div></form>
+{% else %}<p><a href="{% url 'login' %}">Log in</a> to join the conversation.</p>{% endif %}{% endblock %}

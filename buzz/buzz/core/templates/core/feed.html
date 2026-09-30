@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block content %}
+<h1 class="pt">Home</h1>
+{% if user.is_authenticated %}{% include "core/_composer.html" %}
+<div class="tabs"><a class="{% if tab == 'following' %}on{% endif %}" href="?tab=following">Following</a><a class="{% if tab == 'all' %}on{% endif %}" href="?tab=all">Everyone</a></div>
+{% else %}<div class="hero"><h2>See what people are talking about.</h2><p>Join Buzz to post updates, join conversations and follow people you care about.</p><a class="btn light" href="{% url 'register' %}">Create account</a></div>{% endif %}
+{% for p in posts %}{% include "core/_post.html" %}{% empty %}<div class="panel empty"><b>Your feed is quiet.</b><p class="muted">Follow a few people to fill it up.</p><a class="btn sm" href="{% url 'people' %}">Find people</a></div>{% endfor %}{% endblock %}

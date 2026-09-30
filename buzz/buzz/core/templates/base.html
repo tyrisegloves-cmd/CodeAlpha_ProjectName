@@ -1,0 +1,22 @@
+{% load static core_extras %}<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Buzz{% endblock %}</title><link rel="stylesheet" href="{% static 'core/style.css' %}">
+<meta name="csrf" content="{{ csrf_token }}"></head><body>
+{% with page=request.resolver_match.url_name %}
+<div class="shell">
+<aside class="side"><a class="brand" href="{% url 'feed' %}"><i></i>buzz</a>
+<nav class="menu"><a class="{% if page == 'feed' %}on{% endif %}" href="{% url 'feed' %}">Home</a>
+{% if user.is_authenticated %}<a class="{% if page == 'people' %}on{% endif %}" href="{% url 'people' %}">People</a>
+<a class="{% if page == 'profile' and request.resolver_match.kwargs.username == user.username %}on{% endif %}" href="{% url 'profile' user.username %}">Profile</a>
+<form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="navbtn">Log out</button></form>
+{% else %}<a href="{% url 'login' %}">Log in</a><a href="{% url 'register' %}">Join</a>{% endif %}</nav>
+{% if user.is_authenticated %}<a class="me" href="{% url 'profile' user.username %}"><span class="av sm" style="--h:{{ user.username|hue }}">{{ user|initial }}</span>
+<span><b>{{ user.get_full_name|default:user.username }}</b><small>@{{ user.username }}</small></span></a>{% endif %}</aside>
+<main>{% block content %}{% endblock %}</main>
+<aside class="rail">{% if suggestions %}<section class="panel"><h3>Who to follow</h3>
+{% for s in suggestions %}<div class="row"><a class="av sm" style="--h:{{ s.username|hue }}" href="{% url 'profile' s.username %}">{{ s|initial }}</a>
+<a class="grow nm" href="{% url 'profile' s.username %}"><b>{{ s.get_full_name|default:s.username }}</b><small>@{{ s.username }}</small></a>
+<button class="btn sm follow" data-url="{% url 'follow' s.username %}">Follow</button></div>{% endfor %}</section>{% endif %}
+<p class="foot">Buzz &middot; a mini social network demo</p></aside>
+</div>{% endwith %}
+<script src="{% static 'core/app.js' %}"></script></body></html>

@@ -1,0 +1,4 @@
+{% load core_extras %}<form method="post" action="{% url 'post_create' %}" class="composer panel">{% csrf_token %}<input type="hidden" name="next" value="{{ request.path }}">
+<span class="av" style="--h:{{ user.username|hue }}">{{ user|initial }}</span>
+<div class="grow"><textarea name="text" maxlength="280" rows="2" placeholder="What's happening?" required></textarea>
+<div class="bottom"><span class="count muted">280</span><button class="btn" disabled>Post</button></div></div></form>
